@@ -1,12 +1,12 @@
-#!/bin/bash        
+#!/bin/bash
 
-#title           :docker_ap.sh
+#title           :wlanidiot.sh
 #description     :This script will configure a Debian-based system
 #                 for running a wireless access point inside a
 #                 docker container.
 #                 The docker container has unique access to the
 #                 physical wireless interface. 
-#author          :Fran Gonzalez
+#author          :Fran Gonzalez mods ross lazarus 20200124
 #date            :20150520
 #version         :0.1    
 #usage           :bash docker_ap <start|stop> [interface]
@@ -15,31 +15,27 @@
 #                 bridge-utils, rfkill
 #=============================================================all 
 
-#YELLOW='\e[0;33m'
-#BLACK='\e[0;30m'
-#CYAN='\e[0;36m'
-#WHITE='\e[0;37m'
 MAGENTA='\e[0;35m'
 RED='\e[0;31m'
 GREEN='\e[0;32m'
 BLUE='\e[0;34m'
 NC='\e[0m'
 ROOT_UID="0"
-ARCH=$(arch)
+ARCH="$HOSTTYPE"
 
 # WLAN parameters
-SSID="DockerAP"
+SSID="IDIoT"
 HW_MODE="g"
 CHANNEL="6"
-PASSPHRASE="dockerap123"
+PASSPHRASE="longpassword"
 WPA_MODE="WPA-PSK"
 
 # Other parameters
-SUBNET="192.168.7"
-IP_AP="192.168.7.1"
+SUBNET="192.168.4"
+IP_AP="192.168.4.1"
 NETMASK="/24"
 DNS_SERVER="8.8.8.8"
-DOCKER_NAME="ap-container"
+DOCKER_NAME="wlan_idiot"
 CONF_FILE="wlan_config.txt"
 #PATHSCRIPT=$(pwd)
 pushd "$(dirname "$0")" > /dev/null
@@ -48,10 +44,10 @@ popd > /dev/null
 
 if [ "$ARCH" == "armv7l" ]
 then
-    DOCKER_IMAGE="fgg89/armhf-docker-ap"
+    DOCKER_IMAGE="armhf-wlan_idiot"
 elif [ "$ARCH" == "x86_64" ]
 then
-    DOCKER_IMAGE="fgg89/docker-ap"
+    DOCKER_IMAGE="wlan_idiot"
 else
     echo "Currently supported architectures are x86_64 and armv7. Exiting..."
     exit 1
@@ -80,11 +76,16 @@ then
 fi
 
 print_banner () {
-    echo -e "${MAGENTA} ___          _               _   ___   ${NC}"
-    echo -e "${MAGENTA}|   \ ___  __| |_____ _ _    /_\ | _ \\ ${NC}"
-    echo -e "${MAGENTA}| |) / _ \/ _| / / -_) '_|  / _ \|  _/  ${NC}"
-    echo -e "${MAGENTA}|___/\___/\__|_\_\___|_|   /_/ \_\_|    ${NC}"
-    echo ""
+
+	echo -e "${MAGENTA}                                                                             ${NC}"
+	echo -e "${MAGENTA}██╗    ██╗██╗      █████╗ ███╗   ██╗        ██╗██████╗ ██╗ ██████╗ ████████╗ ${NC}"
+	echo -e "${MAGENTA}██║    ██║██║     ██╔══██╗████╗  ██║        ██║██╔══██╗██║██╔═══██╗╚══██╔══╝ ${NC}"
+	echo -e "${MAGENTA}██║ █╗ ██║██║     ███████║██╔██╗ ██║        ██║██║  ██║██║██║   ██║   ██║    ${NC}"
+	echo -e "${MAGENTA}██║███╗██║██║     ██╔══██║██║╚██╗██║        ██║██║  ██║██║██║   ██║   ██║    ${NC}"
+	echo -e "${MAGENTA}╚███╔███╔╝███████╗██║  ██║██║ ╚████║███████╗██║██████╔╝██║╚██████╔╝   ██║    ${NC}"
+	echo -e "${MAGENTA} ╚══╝╚══╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝╚═════╝ ╚═╝ ╚═════╝    ╚═╝    ${NC}"
+    	echo -e "${MAGENTA}                                                                                ${NC}"
+	echo ""
 }
 
 init () {

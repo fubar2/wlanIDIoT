@@ -1,5 +1,5 @@
 # Here goes your custom configuration
-SSID="DockerAP"
-PASSPHRASE="dockerap123"
+SSID="IDIoT"
+PASSPHRASE="longpassword"
 HW_MODE=g
 CHANNEL=1
